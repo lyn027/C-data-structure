@@ -1,0 +1,47 @@
+//动态建立建立一个顺序映像的线性表，完成插入操作
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{	
+	int NUM=4;
+	int * pst= (int*)malloc(sizeof(int)*NUM);
+	int *pst_2;//插入元素后，要增大分配空间 
+	int i,e;
+	int * p,*q;//p q分别指向要插入的位置和最后一个元素 
+	for(i=0;i<=NUM-1;i++)
+		scanf("%d",pst+i);
+	for(i=0;i<=NUM-1;i++)
+		printf("%d\t",*(pst+i));
+	printf("\n");
+	printf("please enter the weizhi:");
+	scanf("%d",&i);
+	printf("please enter the number:");
+	scanf("%d",&e);
+	printf("\n");
+	if (i<1||i>NUM+1)
+		return -1;
+	else
+	{ 
+		//重新开辟更大空间
+		NUM++;
+		pst_2 = (int*)realloc(pst,sizeof(int)*NUM);
+		for(int j=0;j<NUM-1;j++)
+			*(pst_2+j)=*(pst+j);
+		q = pst_2+NUM-1;
+		for(p=pst_2+i-1;p<=q;q--)
+			*(q+1)=*q;
+		*(pst_2+i-1)=e;
+	}
+	for(i=0;i<=NUM-1;i++)
+		printf("%d\t",*pst_2++);	
+	delete []pst_2;
+	free(pst);
+	return 0;
+ } 
+ //遇到的问题：
+ //1.malloc，realloc都放在<stdlib.h>库中
+ //2.第一次未realloc，发现会缺少一个元素，因为分配的空间只有最初的几个，插入后要增大空间。
+ //3.在使用realloc时，参数不全，未说明对哪个变量进行重新分配空间
+ //4.realloc后，要把pst的元素再放到pst_2中去，否则pst_2中是未初始化的数字。
+ //5.*（pst+i）的用法，这样不会改变pst的指向，使用*（pst++）时，若为保存pst的开始位置，则最后会回不去最开始的地方。
+ 
